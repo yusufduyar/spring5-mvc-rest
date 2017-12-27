@@ -39,11 +39,9 @@ jobs:
 
 
       # run tests! and gen code coverage
-      - run: mvn integration-test cobertura:cobertura
+      - run: mvn integration-test
 
-      - store_test_results:
-          path: target/surefire-reports
+      script: "mvn cobertura:cobertura"
 
-      - run:
-          name: Send to CodeCov
-          command: bash <(curl -s https://codecov.io/bash)
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
