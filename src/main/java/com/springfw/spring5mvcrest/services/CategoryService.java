@@ -4,12 +4,14 @@ import com.springfw.spring5mvcrest.api.v1.mapper.CategoryMapper;
 import com.springfw.spring5mvcrest.api.v1.model.CategoryDTO;
 import com.springfw.spring5mvcrest.domain.Category;
 import com.springfw.spring5mvcrest.repositories.ICategoryRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+@Service
 public class CategoryService implements ICategoryService {
 
     private final CategoryMapper categoryMapper;
