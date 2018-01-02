@@ -31,27 +31,46 @@ public class CustomerServiceTest {
 
     @Test
     public void getAllCustomers() throws Exception {
-        List<Customer> customers = Arrays.asList(new Customer(),new Customer());
+        List<Customer> customers = Arrays.asList(new Customer(), new Customer());
         when(customerRepository.findAll()).thenReturn(customers);
 
         List<CustomerDTO> customerDTOS = customerService.getAllCustomers();
 
-        assertEquals(2,customerDTOS.size());
+        assertEquals(2, customerDTOS.size());
     }
 
     @Test
     public void getCustomerById() throws Exception {
         Customer customer = new Customer();
         customer.setId(2L);
-customer.setFirstName("Yusuf");
+        customer.setFirstname("Yusuf");
 
-        Optional<Customer> customerOptional = Optional.of(customer);
-
-        when(customerRepository.findById(anyLong())).thenReturn(customerOptional);
+        when(customerRepository.findById(anyLong())).thenReturn(java.util.Optional.ofNullable(customer));
 
         CustomerDTO customerDTO = customerService.getCustomerById(2L);
 
-        assertEquals("Yusuf",customerDTO.getFirstName());
+        assertEquals("Yusuf", customerDTO.getFirstname());
     }
+
+    @Test
+    public void createNewCustomerTest() throws Exception {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstname("Yusuf");
+
+        Customer newCustomer= new Customer();
+        newCustomer.setFirstname(customerDTO.getFirstname());
+        newCustomer.setLastname(customerDTO.getLastname());
+        newCustomer.setId(1L);
+
+        when(customerRepository.save(any(Customer.class))).thenReturn(newCustomer);
+
+        //when
+        CustomerDTO savedDTO = customerService.createNewCustomer(customerDTO);
+
+       //then
+        assertEquals(customerDTO.getFirstname(),savedDTO.getFirstname());
+        assertEquals("/api/v1/customers/1",savedDTO.getCustomerUrl());
+    }
+
 
 }

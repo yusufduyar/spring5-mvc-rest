@@ -13,6 +13,6 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
-    public String firstName;
-    public String lastName;
+    public String firstname;
+    public String lastname;
 }
