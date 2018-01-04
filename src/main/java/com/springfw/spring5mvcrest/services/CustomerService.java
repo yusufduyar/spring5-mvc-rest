@@ -50,4 +50,33 @@ public class CustomerService implements ICustomerService {
         result.setCustomerUrl("/api/v1/customers/" + savedCustomer.getId());
         return result;
     }
+
+    @Override
+    public CustomerDTO updateCustomer(Long id, CustomerDTO customerDTO) {
+        Customer customer = customerMapper.customerDtoToCustomer(customerDTO);
+        customer.setId(id);
+
+        Customer savedCustomer = customerRepository.save(customer);
+        CustomerDTO resultDTO = customerMapper.customerToCustomerDTO(savedCustomer);
+        resultDTO.setCustomerUrl("/api/v1/customers/" + savedCustomer.getId());
+
+        return resultDTO;
+    }
+
+    @Override
+    public CustomerDTO patchCustomer(Long id, CustomerDTO customerDTO) {
+        return customerRepository.findById(id).map(customer -> {
+            if (customerDTO.getFirstname() != null) {
+                customer.setFirstname(customerDTO.getFirstname());
+            }
+            if (customerDTO.getLastname() != null) {
+                customer.setLastname(customerDTO.getLastname());
+            }
+            Customer savedCustomer = customerRepository.save(customer);
+            CustomerDTO resultDTO = customerMapper.customerToCustomerDTO(savedCustomer);
+            resultDTO.setCustomerUrl("/api/v1/customers/" + savedCustomer.getId());
+
+            return resultDTO;
+        }).orElseThrow(RuntimeException::new);
+    }
 }
