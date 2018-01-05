@@ -36,11 +36,12 @@ public class CustomerService implements ICustomerService {
     @Override
     public CustomerDTO getCustomerById(Long id) {
         return customerRepository.findById(id)
-                .map(customer -> {
-                    CustomerDTO customerDTO = customerMapper.customerToCustomerDTO(customer);
-                    customerDTO.setCustomerUrl(getCustomerUrl(customer.getId()));
+                .map(customerMapper::customerToCustomerDTO)
+                .map(customerDTO -> {
+                    customerDTO.setCustomerUrl(getCustomerUrl(id));
                     return customerDTO;
-                }).get();
+                })
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
@@ -78,7 +79,7 @@ public class CustomerService implements ICustomerService {
             resultDTO.setCustomerUrl(getCustomerUrl(savedCustomer.getId()));
 
             return resultDTO;
-        }).orElseThrow(RuntimeException::new);
+        }).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override

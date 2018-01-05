@@ -1,8 +1,10 @@
 package com.springfw.spring5mvcrest.controllers.v1;
 
 import com.springfw.spring5mvcrest.api.v1.model.CustomerDTO;
+import com.springfw.spring5mvcrest.controllers.RestResponseExceptionHandler;
 import com.springfw.spring5mvcrest.services.ICategoryService;
 import com.springfw.spring5mvcrest.services.ICustomerService;
+import com.springfw.spring5mvcrest.services.ResourceNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -40,7 +42,9 @@ public class CustomerControllerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(customerController)
+                .setControllerAdvice(new RestResponseExceptionHandler())
+                .build();
     }
 
     @Test
@@ -76,6 +80,17 @@ public class CustomerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstname", equalTo("Yusuf")));
+    }
+
+
+    @Test
+    public void getCustomerById_throws_resourceNotFoundException() throws Exception {
+
+        when(customerService.getCustomerById(anyLong())).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(get(getCustomerUrl(1L))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -152,7 +167,7 @@ public class CustomerControllerTest {
         verify(customerService).deleteCustomerById(anyLong());
     }
 
-    private String getCustomerUrl(Long id){
-        return CustomerController.BASE_URL+"/"+id;
+    private String getCustomerUrl(Long id) {
+        return CustomerController.BASE_URL + "/" + id;
     }
 }
