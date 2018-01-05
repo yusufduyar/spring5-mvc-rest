@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
@@ -53,7 +54,7 @@ public class CategoryControllerTest {
 
         when(categoryService.getAllCategories()).thenReturn(categoryDTOS);
 
-        mockMvc.perform(get("/api/v1/categories/")
+        mockMvc.perform(get(categoryController.BASE_URL)
         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.categories",hasSize(2)));
@@ -66,6 +67,12 @@ public class CategoryControllerTest {
         categoryDTO.setName("thing");
 
         when(categoryService.getCategoryByName(anyString())).thenReturn(categoryDTO);
+
+//        MvcResult result =   mockMvc.perform(get("/api/v1/categories/thing")
+//                .contentType(MediaType.APPLICATION_JSON))
+//                .andReturn();
+//        String content = result.getResponse().getContentAsString();
+//        System.out.println(content);
 
         mockMvc.perform(get("/api/v1/categories/thing")
                 .contentType(MediaType.APPLICATION_JSON))
