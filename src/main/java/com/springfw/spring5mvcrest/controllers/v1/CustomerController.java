@@ -2,7 +2,6 @@ package com.springfw.spring5mvcrest.controllers.v1;
 
 import com.springfw.spring5mvcrest.api.v1.model.CustomerDTO;
 import com.springfw.spring5mvcrest.api.v1.model.CustomerListDTO;
-import com.springfw.spring5mvcrest.domain.Customer;
 import com.springfw.spring5mvcrest.services.ICustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,5 +40,11 @@ public class CustomerController {
     @PatchMapping("/{id}")
     public ResponseEntity<CustomerDTO> patchCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO){
         return new ResponseEntity<>(customerService.patchCustomer(id, customerDTO), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCustomerById(@PathVariable Long id){
+        customerService.deleteCustomerById(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
