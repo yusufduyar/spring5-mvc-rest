@@ -98,6 +98,6 @@ public class CustomerServiceTest {
 
         customerService.deleteCustomerById(id);
 
-        verify(customerRepository,times(1));
+        verify(customerRepository,times(1)).deleteById(anyLong());
     }
 }

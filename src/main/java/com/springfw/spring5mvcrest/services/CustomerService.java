@@ -87,7 +87,7 @@ public class CustomerService implements ICustomerService {
         customerRepository.deleteById(id);
     }
 
-    private String getCustomerUrl(Long id){
-        return CustomerController.BASE_URL+"/"+id;
+    private String getCustomerUrl(Long id) {
+        return CustomerController.BASE_URL + "/" + id;
     }
 }

@@ -6,6 +6,7 @@ import com.springfw.spring5mvcrest.bootstrap.Bootstrap;
 import com.springfw.spring5mvcrest.domain.Customer;
 import com.springfw.spring5mvcrest.repositories.ICategoryRepository;
 import com.springfw.spring5mvcrest.repositories.ICustomerRepository;
+import com.springfw.spring5mvcrest.repositories.IVendorRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,13 +29,16 @@ public class CustomerServiceIT {
     @Autowired
     ICategoryRepository categoryRepository;
 
+    @Autowired
+    IVendorRepository vendorRepository;
+
     ICustomerService customerService;
 
     @Before
     public void setUp() throws Exception{
         System.out.println("CustomerCount :" + customerRepository.findAll().size());
 
-        Bootstrap bootstrap = new Bootstrap(categoryRepository,customerRepository);
+        Bootstrap bootstrap = new Bootstrap(categoryRepository,customerRepository, vendorRepository);
         bootstrap.run();
 
         customerService = new CustomerService(CustomerMapper.INSTANCE,customerRepository);
